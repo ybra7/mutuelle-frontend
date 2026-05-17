@@ -61,7 +61,7 @@ export default function Login() {
           <div className="w-16 h-16 rounded-2xl bg-gold-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-gold-500/30">
             <span className="text-navy-900 font-display font-black text-3xl">M</span>
           </div>
-          <h1 className="font-display font-bold text-white text-2xl">Mutuelle de Solidarité</h1>
+          <h1 className="font-display font-bold text-white text-2xl">Mutuelle de Solidarité AEJ</h1>
           <p className="text-white/40 text-sm mt-1">Connectez-vous à votre espace</p>
         </div>
 
