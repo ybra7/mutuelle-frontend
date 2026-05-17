@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Eye, EyeOff, LogIn, CheckCircle, XCircle, Loader } from 'lucide-react'
+import { Eye, EyeOff, LogIn, Shield, CheckCircle, XCircle, Loader } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../api/client'
 
@@ -11,8 +11,9 @@ export default function Login() {
   const [form, setForm]         = useState({ username: '', password: '' })
   const [show, setShow]         = useState(false)
   const [loading, setLoading]   = useState(false)
-  const [serverStatus, setServerStatus] = useState('checking')
+  const [serverStatus, setServerStatus] = useState('checking') // 'checking' | 'ok' | 'error'
 
+  // Vérifier que le backend répond au démarrage
   useEffect(() => {
     api.get('/ping')
       .then(() => setServerStatus('ok'))
@@ -22,7 +23,7 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
     if (serverStatus === 'error') {
-      toast.error('Le serveur est inaccessible. Veuillez réessayer.')
+      toast.error('Le serveur PHP est inaccessible. Démarrez-le sur le port 6000.')
       return
     }
     if (!form.username || !form.password) {
@@ -45,7 +46,7 @@ export default function Login() {
   const statusInfo = {
     checking: { icon: <Loader size={13} className="animate-spin" />, text: 'Vérification du serveur…', cls: 'text-white/40 border-white/10 bg-white/5' },
     ok:       { icon: <CheckCircle size={13} />, text: 'Serveur connecté', cls: 'text-emerald-400 border-emerald-500/20 bg-emerald-500/8' },
-    error:    { icon: <XCircle size={13} />, text: 'Serveur inaccessible — contactez l\'administrateur', cls: 'text-red-400 border-red-500/20 bg-red-500/8' },
+    error:    { icon: <XCircle size={13} />, text: 'Serveur inaccessible — lancez php -S 127.0.0.1:6000 api.php', cls: 'text-red-400 border-red-500/20 bg-red-500/8' },
   }[serverStatus]
 
   return (
@@ -61,7 +62,7 @@ export default function Login() {
           <div className="w-16 h-16 rounded-2xl bg-gold-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-gold-500/30">
             <span className="text-navy-900 font-display font-black text-3xl">M</span>
           </div>
-          <h1 className="font-display font-bold text-white text-2xl">Mutuelle AEJ</h1>
+          <h1 className="font-display font-bold text-white text-2xl">Mutuelle de Solidarité</h1>
           <p className="text-white/40 text-sm mt-1">Connectez-vous à votre espace</p>
         </div>
 
@@ -80,7 +81,7 @@ export default function Login() {
               </label>
               <input
                 type="text"
-                placeholder="Votre identifiant"
+                placeholder="admin  ou  m001, m002…"
                 value={form.username}
                 onChange={e => setForm(p => ({ ...p, username: e.target.value }))}
                 className="input-field w-full"
@@ -123,6 +124,17 @@ export default function Login() {
               {loading ? 'Connexion…' : 'Se connecter'}
             </button>
           </form>
+        </div>
+
+        {/* Aide comptes */}
+        <div className="mt-4 card p-4">
+          <div className="flex items-start gap-3">
+            <Shield size={14} className="text-gold-400 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-white/40 space-y-1">
+              <p><span className="text-white/60 font-medium">Admin :</span> admin / Admin@2026</p>
+              <p><span className="text-white/60 font-medium">Membres :</span> m001 à m007 / Mutuelle@2026</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
